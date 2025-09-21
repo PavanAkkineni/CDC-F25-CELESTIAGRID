@@ -1,23 +1,72 @@
+import { llamaHelper } from './llamaHelper.js';
+
 export class UIController {
     constructor(app) {
         this.app = app;
         this.infoPanel = document.getElementById('info-panel');
-        this.panelContent = document.getElementById('panel-content');
+        this.satelliteDataContainer = document.getElementById('satellite-data-container');
         this.debrisName = document.getElementById('debris-name');
         this.debrisCount = document.getElementById('debris-count');
         this.timeDisplay = document.getElementById('time-display');
         this.speedValue = document.getElementById('speed-value');
+
+        // AI Assistant UI Elements
+        this.aiAssistantSection = document.getElementById('ai-assistant-section');
+        this.aiIntro = document.getElementById('ai-intro');
+        this.chatLog = document.getElementById('chat-log');
+        this.suggestedQuestions = document.getElementById('suggested-questions');
+        this.chatInput = document.getElementById('chat-input');
+        this.chatSendBtn = document.getElementById('chat-send');
+
+        // Physics Info Container
+        this.physicsInfoContainer = document.getElementById('physics-info-container');
+
+        this.chatSendBtn.addEventListener('click', () => this.handleUserQuery());
+        this.chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.handleUserQuery();
+        });
+
+        this.currentSatellite = null;
+        this.satelliteInfo = null;
     }
 
-    showDebrisInfo(debrisData) {
+    async showDebrisInfo(debrisData) {
         this.debrisName.textContent = debrisData.name;
+        this.currentSatellite = debrisData;
+
+        // First, display all the technical satellite data
+        this.displaySatelliteData(debrisData);
+
+        // Then, show and initialize the AI assistant section
+        this.aiAssistantSection.style.display = 'block';
+        this.clearChat();
+        this.aiIntro.innerHTML = `<em>Contacting satellite...</em>`;
+
+        // Fetch the document and generate AI content
+        this.satelliteInfo = await llamaHelper.loadSatelliteDocument(this.currentSatellite.name);
         
-        // Calculate current orbital parameters
+        const intro = await llamaHelper.generateSatelliteIntro(this.currentSatellite, this.satelliteInfo);
+        this.aiIntro.innerHTML = intro;
+
+        const questions = await llamaHelper.generateSuggestedQuestions(this.currentSatellite, this.satelliteInfo);
+        this.displaySuggestedQuestions(questions);
+
+        // Show physics info in the main panel
+        this.showPhysicsInfo(debrisData);
+
+        // Finally, ensure the panel is visible and properly sized
+        this.infoPanel.classList.remove('minimized');
+        requestAnimationFrame(() => {
+            this.infoPanel.classList.add('active');
+        });
+    }
+
+    displaySatelliteData(debrisData) {
         const apogee = this.calculateApogee(debrisData.altitude, debrisData.eccentricity);
         const perigee = this.calculatePerigee(debrisData.altitude, debrisData.eccentricity);
         const velocity = this.calculateOrbitalVelocity(debrisData.altitude);
-        
-        this.panelContent.innerHTML = `
+
+        this.satelliteDataContainer.innerHTML = `
             <div class="info-group">
                 <h4>Identification</h4>
                 <div class="info-item">
@@ -69,7 +118,7 @@ export class UIController {
                     <span class="info-value">${velocity.toFixed(2)} km/s</span>
                 </div>
             </div>
-            
+
             <div class="info-group">
                 <h4>Epoch Data</h4>
                 <div class="info-item">
@@ -98,33 +147,94 @@ export class UIController {
                 </div>
             </div>
         `;
-        
-        // Show the panel and ensure it's not minimized
-        this.infoPanel.classList.remove('minimized');
-        
-        // Small delay to ensure proper CSS transitions
-        requestAnimationFrame(() => {
-            this.infoPanel.classList.add('active');
+    }
+
+    displaySuggestedQuestions(questions) {
+        this.suggestedQuestions.innerHTML = '';
+        questions.forEach(q => {
+            const btn = document.createElement('button');
+            btn.className = 'suggested-question';
+            btn.textContent = q;
+            btn.onclick = () => {
+                this.chatInput.value = q;
+                this.handleUserQuery();
+            };
+            this.suggestedQuestions.appendChild(btn);
         });
+    }
+
+    async handleUserQuery() {
+        const query = this.chatInput.value.trim();
+        if (!query || !this.currentSatellite) return;
+
+        this.appendMessage(query, 'user');
+        this.chatInput.value = '';
+
+        const response = await llamaHelper.answerQuestion(query, this.currentSatellite, this.satelliteInfo);
+        this.appendMessage(response, 'assistant');
+    }
+
+    showPhysicsInfo(debrisData) {
+        const gravity = this.calculateGravityAtAltitude(debrisData.altitude);
+        const velocity = this.calculateOrbitalVelocity(debrisData.altitude);
+
+        this.physicsInfoContainer.innerHTML = `
+            <div class="physics-info">
+                <h4>🚀 Zero-G Physics at this Orbit</h4>
+                <p class="physics-fact">
+                    <strong>Why I feel weightless:</strong> Even though gravity here is ${gravity.percentage.toFixed(1)}% of Earth's surface gravity, I'm in continuous free-fall around Earth!
+                </p>
+                <div class="physics-item">
+                    <span class="physics-label">Local Gravity:</span>
+                    <span class="physics-value">${gravity.gravity.toFixed(2)} m/s² (${gravity.percentage.toFixed(1)}% of surface)</span>
+                </div>
+                <div class="physics-item">
+                    <span class="physics-label">Orbital Velocity:</span>
+                    <span class="physics-value">${velocity} km/s</span>
+                </div>
+                <div class="physics-item">
+                    <span class="physics-label">Free-fall State:</span>
+                    <span class="physics-value">Weightless (0G experience)</span>
+                </div>
+                <div class="physics-item">
+                    <span class="physics-label">Orbital Period:</span>
+                    <span class="physics-value">${this.formatPeriod(debrisData.period)}</span>
+                </div>
+                <p class="physics-note">💡 Microgravity = Gravity + Centripetal acceleration canceling each other out</p>
+            </div>
+        `;
+    }
+
+    calculateGravityAtAltitude(altitude) {
+        const earthRadius = 6371; // km
+        const surfaceGravity = 9.80665; // m/s²
+        const ratio = earthRadius / (earthRadius + altitude);
+        const gravityAtAltitude = surfaceGravity * Math.pow(ratio, 2);
+        const gravityPercent = (gravityAtAltitude / surfaceGravity) * 100;
         
-        // Update minimize button text if it exists
-        const minimizeBtn = document.getElementById('panel-minimize');
-        if (minimizeBtn) {
-            minimizeBtn.textContent = '−';
-        }
-        
-        // Ensure panel is properly positioned (in case dragging moved it off-screen)
-        if (this.infoPanel.style.right === 'auto' || this.infoPanel.style.left) {
-            // Reset to CSS positioning if it was dragged
-            this.infoPanel.style.left = '';
-            this.infoPanel.style.top = '';
-            this.infoPanel.style.right = '';
-            this.infoPanel.style.bottom = '';
-        }
+        return {
+            gravity: gravityAtAltitude,
+            percentage: gravityPercent
+        };
+    }
+
+    appendMessage(text, sender) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `chat-message ${sender}-message`;
+        messageEl.textContent = text;
+        this.chatLog.appendChild(messageEl);
+        this.chatLog.scrollTop = this.chatLog.scrollHeight;
+    }
+
+    clearChat() {
+        this.chatLog.innerHTML = '';
+        this.suggestedQuestions.innerHTML = '';
+        this.aiIntro.innerHTML = '';
     }
 
     hideInfoPanel() {
         this.infoPanel.classList.remove('active');
+        this.aiAssistantSection.style.display = 'none';
     }
 
     updateDebrisCount(count) {

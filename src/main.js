@@ -6,6 +6,7 @@ import { TLEParser } from './tleParser.js';
 import { Earth } from './earth.js';
 import { DebrisManager } from './debrisManager.js';
 import { UIController } from './uiController.js';
+import { llamaHelper } from './llamaHelper.js';
 import { SpatialSelector } from './spatialSelector.js';
 import { CollisionDetector } from './collisionDetector.js';
 import { FocusedView } from './focusedView.js';
@@ -60,6 +61,10 @@ class OrbitalDebrisVisualizer {
 
         // Initialize time controls
         this.initializeTimeControls();
+
+        // Minimize panels by default
+        this.toggleTimePanel();
+        this.toggleLegendPanel();
 
         // Hide loading screen
         setTimeout(() => {
@@ -191,7 +196,7 @@ class OrbitalDebrisVisualizer {
     }
 
     setupUI() {
-        this.uiController = new UIController(this);
+        this.uiController = new UIController(this, llamaHelper);
     }
 
     initializeTimeControls() {
@@ -228,6 +233,9 @@ class OrbitalDebrisVisualizer {
         document.getElementById('panel-close').addEventListener('click', () => this.uiController.hideInfoPanel());
         document.getElementById('panel-minimize').addEventListener('click', () => this.toggleInfoPanel());
         document.getElementById('legend-minimize').addEventListener('click', () => this.toggleLegendPanel());
+        
+        // Zero-G Mode Toggle
+        document.getElementById('zerog-toggle').addEventListener('click', () => this.toggleZeroGMode());
 
 
         // Time control events
@@ -650,6 +658,20 @@ IRIDIUM 33 DEB
         
         panel.classList.toggle('minimized');
         minimize.textContent = panel.classList.contains('minimized') ? '' : '−';
+    }
+    
+    toggleZeroGMode() {
+        const button = document.getElementById('zerog-toggle');
+        const body = document.body;
+        const isActive = body.classList.contains('zerog-mode');
+        
+        if (isActive) {
+            body.classList.remove('zerog-mode');
+            button.classList.remove('active');
+        } else {
+            body.classList.add('zerog-mode');
+            button.classList.add('active');
+        }
     }
     
     setupDraggablePanels() {

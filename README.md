@@ -1,111 +1,142 @@
-# Orbital Debris Tracker - 3D Space Visualization
+# Carolina Data Challenge 2025: Zero Gravity
 
-A professional web-based 3D visualization platform for tracking orbital debris and satellites using TLE (Two-Line Element) data. Features real-time orbit simulation, smooth interactive exploration, and a modern space-themed UI.
+**Project: CelestiaGrid – Orbital Debris Tracker (3D Space Visualization)**
+
+Using NASA TLE API on Grad Track
+
+---
+
+## About the Project
+
+As part of **Carolina Data Challenge 2025**, we wanted to approach a problem far away but becoming increasingly large by the day: **space debris**. Thousands of new satellites enter orbit every year, and with them, the risk of collision and crowding in space continues to rise. We asked ourselves: *How do we make an abstract problem understandable and engaging?*
+
+That question inspired us to create **CelestiaGrid: Orbital Debris Tracker – 3D Space Visualization**. Using **TLE (Two-Line Element) data** from organizations such as **NASA** and **CelesTrak**, we built a platform that brings satellites and debris to life on a 3D globe. Users can explore Earth's orbit in real time, track thousands of objects, and even ask an **AI assistant** questions about orbits, altitude bands, or collision dangers.
+
+Our journey was about more than plotting dots on a map. It became an exercise in **data storytelling**. We rendered Earth with **Three.js**, simulated orbital mechanics with **Satellite.js**, and integrated an AI for natural language interaction. Along the way, we implemented methods for sorting debris into altitude categories (LEO, MEO, GEO, HEO), detecting potential conjunctions, and illustrating just how congested Earth’s orbit has become.
+
+What excites us most is the potential impact. A tool like CelestiaGrid could help **students**, **researchers**, and **policymakers** visualize and understand the issue of orbital debris. It can be used for education, awareness, and as a foundation for future collision warning systems. By placing orbital debris within sight and control, CelestiaGrid encourages conversation about **space sustainability** and the **future of humanity in orbit**.
+
+---
 
 ## Features
 
-### 🌍 3D Globe Environment
-- Realistic Earth rendering with day/night textures
-- Atmospheric glow effects
-- Cloud layers and city lights
-- Smooth rotation and navigation
+### 3D Globe Environment
+* Realistic Earth with day/night textures, atmosphere, and city lights  
+* Smooth globe rotation and zoom navigation  
 
-### 🛰️ Debris Visualization
-- Real-time TLE data parsing and orbital propagation
-- Color-coded debris by altitude (LEO, MEO, GEO, HEO)
-- Orbital path visualization
-- Optimized rendering for thousands of objects
+### Satellite & Debris Tracking
+* TLE-based orbital propagation (via Satellite.js)  
+* Orbits color-coded by altitude (LEO, MEO, GEO, HEO)  
+* Toggle orbit trails and object labels  
 
-### 🎮 Interactive Controls
-- Click-to-select debris with smooth zoom transitions
-- Detailed information panel with orbital parameters
-- Search by satellite name or NORAD ID
-- Playback speed control
-- Toggle orbit trails and labels
+### Interactive Controls
+* Click-to-select satellites/debris  
+* Search by **name or NORAD ID**  
+* Zoom into objects and view detailed orbital parameters  
 
-### 🎨 Professional UI
-- Dark space-themed design
-- Smooth animations and transitions
-- Responsive layout
-- Real-time statistics display
+### AI Satellite Assistant
+* Ask questions about specific satellites, their missions, and orbital mechanics.
+* Get introductions and suggested questions for selected satellites.
+* Integrated securely with the Together AI API.
+
+---
+
+## Steps of Analysis
+
+1. **Data Collection** – Pulled archived TLEs from **CelesTrak/NASA feeds**  
+2. **TLE Parsing** – Extracted **Line 1/Line 2** elements and propagated orbits  
+3. **Visualization** – Plotted objects in a 3D environment with altitude coding  
+4. **Analysis** – Compared orbital densities and detected potential conjunctions  
+5. **Communication** – Enabled an AI-driven Q&A assistant for contextual insights  
+
+---
+
+## Visualizations
+
+Below are key visual outputs that demonstrate our workflow and analysis:
+
+1. **Global Orbital Debris Map** – Thousands of tracked objects rendered in real-time  
+   *(Insert screenshot/GIF here)*  
+
+2. **Altitude-Based Classification** – LEO, MEO, GEO, and HEO objects shown in different colors for clarity  
+   *(Insert screenshot/GIF here)*  
+
+3. **Collision Detection Demo** – Example of two close approaches flagged by our system  
+   *(Insert screenshot/GIF here)*  
+
+4. **AI Assistant in Action** – Example queries and AI-powered answers for a selected satellite. 
+   *(Insert screenshot/GIF here)*  
+
+---
+
+## Conclusions
+
+* **Debris density is highest in LEO**, confirming risks of congestion and collisions  
+* Visualization reveals clear clustering patterns not obvious in raw data  
+* The interactive globe helps bridge the gap between raw orbital mechanics and human understanding  
+* AI integration lowers barriers, making **space situational awareness accessible** to non-experts  
+
+---
+
+## Value and Impact
+
+* **Education** – A tool for students to explore and understand space debris  
+* **Research** – Useful for studying decay rates, clustering, and conjunctions  
+* **Policy Awareness** – Makes the urgency of orbital debris mitigation more visible  
+* **Hackathon Relevance** – Demonstrates how data science and visualization translate into **actionable insights**  
+
+---
 
 ## Installation
 
-1. Install dependencies:
 ```bash
+git clone https://github.com/PavanAkkineni/CDC-F25-CELESTIAGRID.git
+cd CDC-F25-CELESTIAGRID
 npm install
-```
-
-2. Run the development server:
-```bash
 npm run dev
 ```
 
-3. Open your browser to `http://localhost:3000`
+Then open: `http://localhost:3000` (or the port specified in the terminal)
 
-## Usage
+---
 
-### Navigation
-- **Left Mouse**: Rotate view
-- **Right Mouse**: Pan camera
-- **Scroll**: Zoom in/out
-- **Click Debris**: Select and view details
+## Project Structure
 
-### Controls
-- **Reset View**: Return to default camera position
-- **Toggle Orbits**: Show/hide orbital paths
-- **Toggle Labels**: Show/hide debris labels
-- **Fullscreen**: Enter fullscreen mode
-- **Play/Pause**: Control simulation playback
-- **Speed Slider**: Adjust simulation speed (0.1x to 100x)
-
-### Loading TLE Data
-- Click "Upload TLE File" to load custom TLE data
-- Supports standard TLE format (.txt, .tle files)
-- Sample data loads automatically on startup
-
-### Search Function
-- Type satellite name or NORAD ID in search bar
-- Click search result to zoom to object
-- Displays up to 10 matching results
-
-## TLE Data Format
-
-The application accepts standard Two-Line Element format:
 ```
-SATELLITE NAME
-1 NNNNNC NNNNNAAA NNNNN.NNNNNNNN +.NNNNNNNN +NNNNN-N +NNNNN-N N NNNNN
-2 NNNNN NNN.NNNN NNN.NNNN NNNNNNN NNN.NNNN NNN.NNNN NN.NNNNNNNNNNNNNN
+CDC-F25-CELESTIAGRID/
+├── dist/                 # Build output
+├── public/               # Static assets (sample TLE, satellite docs)
+├── src/                  # Core code
+│   ├── earth.js
+│   ├── debrisManager.js
+│   ├── collisionDetector.js
+│   ├── tleParser.js
+│   ├── llamaHelper.js
+│   ├── uiController.js
+│   └── style.css
+├── index.html
+├── vite.config.js
+├── package.json
+└── README.md
 ```
+
+---
 
 ## Technologies Used
 
-- **Three.js**: 3D rendering and WebGL
-- **Satellite.js**: TLE parsing and orbital mechanics
-- **GSAP**: Smooth animations and transitions
-- **Vite**: Fast build tool and dev server
+* **Three.js** – 3D rendering
+* **Satellite.js** – TLE parsing & orbital mechanics
+* **GSAP** – Animations
+* **Vite** – Build tool
+* **Llama-3.3-70B-Instruct-Turbo-Free** – AI Assistant via Together AI API
 
-## Performance
+---
 
-- Instanced rendering for large debris fields
-- Level-of-detail system for optimal performance
-- Efficient orbital propagation algorithms
-- GPU-accelerated particle effects
+## Citations & Acknowledgments
 
-## Browser Requirements
+* *Three.js, Satellite.js, GSAP, Vite*
+* *CelesTrak* – Source of TLE data
+* *Together AI* – For providing access to the Llama model.
+* *ChatGPT (OpenAI)* – Assisted in brainstorming, debugging, and documentation
 
-- Modern browser with WebGL support
-- Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- Recommended: Desktop with dedicated GPU
-
-## Build for Production
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist` directory.
-
-## License
-
-MIT License - Feel free to use for educational and commercial purposes.
+Built at *Carolina Data Challenge 2025 (UNC Chapel Hill)* under the theme: **Zero Gravity** (included "zero gravity" elements in the webpage).

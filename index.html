@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orbital Debris Tracker | 3D Space Visualization</title>
+    <title>CelestiaGrid | 3D Space Visualization</title>
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
@@ -28,7 +28,7 @@
                     <circle cx="50" cy="50" r="5" fill="currentColor"/>
                     <ellipse cx="50" cy="50" rx="45" ry="20" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
                 </svg>
-                <span>Orbital Debris Tracker</span>
+                <span>CelestiaGrid</span>
             </div>
             
             <div class="nav-controls">
@@ -89,6 +89,14 @@
                     <rect x="14" y="4" width="4" height="16"/>
                 </svg>
             </button>
+            <button class="toolbar-btn zerog-toggle" id="zerog-toggle" title="Toggle Zero-G Mode">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 10v6m11-7h-6M6 12H0"/>
+                    <path d="M18.4 5.6l-4.2 4.2M9.8 14.2l-4.2 4.2M5.6 5.6l4.2 4.2M14.2 14.2l4.2 4.2"/>
+                </svg>
+                <span class="zerog-label">0G</span>
+            </button>
             <div class="speed-control">
                 <label for="speed-slider">Speed:</label>
                 <input type="range" id="speed-slider" min="0.1" max="100" value="1" step="0.1">
@@ -106,7 +114,21 @@
                 </div>
             </div>
             <div class="panel-content" id="panel-content">
-                <p class="panel-hint">Click on any debris object to view its details</p>
+                <div id="satellite-data-container">
+                    <p class="panel-hint">Click on any debris object to view its details</p>
+                </div>
+                <!-- AI Assistant Section -->
+                <div class="ai-assistant-section" id="ai-assistant-section" style="display: none;">
+                    <div class="ai-intro" id="ai-intro"></div>
+                    <div id="physics-info-container"></div>
+                    <div class="chat-log" id="chat-log"></div>
+                    <h5 class="suggested-questions-title">Ask Me About:</h5>
+                    <div class="suggested-questions" id="suggested-questions"></div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" class="chat-input" placeholder="Ask a question...">
+                        <button id="chat-send" class="chat-send-btn">Send</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -223,28 +245,6 @@
                     <div class="legend-item">
                         <span class="legend-color" style="background: #aa00ff;"></span>
                         <span>High Earth Orbit (&gt; 35,786 km)</span>
-                    </div>
-                </div>
-                
-                <div class="legend-separator"></div>
-                
-                <div class="legend-section">
-                    <h5>Collision Risk</h5>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #ff0000;"></span>
-                        <span>Critical (&lt; 0.5 km)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #ff6600;"></span>
-                        <span>High (&lt; 1.0 km)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #ffaa00;"></span>
-                        <span>Medium (&lt; 1.5 km)</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #ffff00;"></span>
-                        <span>Low (&lt; 2.0 km)</span>
                     </div>
                 </div>
             </div>
