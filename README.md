@@ -1,6 +1,10 @@
 # Carolina Data Challenge 2025: Zero Gravity
 
-**Project: CelestiaGrid – Orbital Debris Tracker (3D Space Visualization)**
+**Project: CelestiaGrid – Orbital Satellite Tracker (3D Space Visualization)**
+
+Project Website: https://profound-peony-baaf58.netlify.app/
+Project Demo: https://youtu.be/a8MNCnfJ7X4
+
 
 Using NASA TLE API on Grad Track
 
@@ -8,9 +12,9 @@ Using NASA TLE API on Grad Track
 
 ## About the Project
 
-As part of **Carolina Data Challenge 2025**, we wanted to approach a problem far away but becoming increasingly large by the day: **space debris**. Thousands of new satellites enter orbit every year, and with them, the risk of collision and crowding in space continues to rise. We asked ourselves: *How do we make an abstract problem understandable and engaging?*
+As part of **Carolina Data Challenge 2025**, we wanted to approach a problem far away but becoming increasingly large by the day: **space satellite**. Thousands of new satellites enter orbit every year, and with them, the risk of collision and crowding in space continues to rise. We asked ourselves: *How do we make an abstract problem understandable and engaging?*
 
-That question inspired us to create **CelestiaGrid: Orbital Debris Tracker – 3D Space Visualization**. Using **TLE (Two-Line Element) data** from organizations such as **NASA** and **CelesTrak**, we built a platform that brings satellites and debris to life on a 3D globe. Users can explore Earth's orbit in real time, track thousands of objects, and even ask an **AI assistant** questions about orbits, altitude bands, or collision dangers.
+That question inspired us to create **CelestiaGrid: Orbital Satellite Tracker – 3D Space Visualization**. Using **TLE (Two-Line Element) data** from organizations such as **NASA** and **CelesTrak**, we built a platform that brings satellites and debris to life on a 3D globe. Users can explore Earth's orbit in real time, track thousands of objects, and even ask an **AI assistant** questions about orbits, altitude bands, or collision dangers.
 
 Our journey was about more than plotting dots on a map. It became an exercise in **data storytelling**. We rendered Earth with **Three.js**, simulated orbital mechanics with **Satellite.js**, and integrated an AI for natural language interaction. Along the way, we implemented methods for sorting debris into altitude categories (LEO, MEO, GEO, HEO), detecting potential conjunctions, and illustrating just how congested Earth’s orbit has become.
 
