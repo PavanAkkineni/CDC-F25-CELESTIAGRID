@@ -2,7 +2,7 @@
 
 **Project: CelestiaGrid – Orbital Satellite Tracker (3D Space Visualization)**
 
-Project Website: https://profound-peony-baaf58.netlify.app/
+Project Website: https://profound-peony-baaf58.netlify.app/ |
 Project Demo: https://youtu.be/a8MNCnfJ7X4
 
 
