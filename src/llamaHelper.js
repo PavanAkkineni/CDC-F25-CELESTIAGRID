@@ -2,7 +2,7 @@ import mammoth from 'mammoth';
 
 class LlamaHelper {
     constructor() {
-        this.apiKey = '630e0bb3b0990263b9ab779ca9e80376388b627d571c1c922e72b366dbf918a8';
+        this.apiKey = '';
         this.model = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free";
         this.documentCache = new Map();
     }
